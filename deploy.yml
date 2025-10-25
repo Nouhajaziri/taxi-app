@@ -1,0 +1,66 @@
+name: 🚀 Déployer Taxi Express sur GitHub Pages
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+env:
+  FLUTTER_VERSION: '3.13.0'
+
+jobs:
+  build:
+    name: 🛠 Construire l'application Flutter Web
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Télécharger le code
+      uses: actions/checkout@v4
+      
+    - name: 🐦 Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: ${{ env.FLUTTER_VERSION }}
+        cache: true
+        cache-key: flutter-${{ env.FLUTTER_VERSION }}
+        
+    - name: 📦 Installer les dépendances
+      run: flutter pub get
+      
+    - name: 🔍 Analyser le code
+      run: flutter analyze
+      
+    - name: 🧪 Tester l'application
+      run: flutter test
+      
+    - name: 🌐 Construire la version Web
+      run: flutter build web --release --base-href /taxi-app/
+      
+    - name: 📂 Lister les fichiers générés
+      run: ls -la build/web/
+      
+    - name: 🎯 Upload les fichiers pour le déploiement
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: build/web
+
+  deploy:
+    name: 🚀 Déployer sur GitHub Pages
+    needs: build
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    
+    permissions:
+      pages: write
+      id-token: write
+      
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+      
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 🎯 Déployer sur GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
