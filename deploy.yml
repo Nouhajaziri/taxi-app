@@ -1,66 +1,33 @@
-name: 🚀 Déployer Taxi Express sur GitHub Pages
+name: Deploy Flutter Web to GitHub Pages
 
 on:
   push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
-
-env:
-  FLUTTER_VERSION: '3.13.0'
+    branches: [ main ]
 
 jobs:
-  build:
-    name: 🛠 Construire l'application Flutter Web
+  build-and-deploy:
     runs-on: ubuntu-latest
     
     steps:
-    - name: 📥 Télécharger le code
+    - name: 📥 Checkout code
       uses: actions/checkout@v4
       
     - name: 🐦 Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: ${{ env.FLUTTER_VERSION }}
-        cache: true
-        cache-key: flutter-${{ env.FLUTTER_VERSION }}
+        flutter-version: '3.13.0'
         
-    - name: 📦 Installer les dépendances
+    - name: 📦 Get dependencies
       run: flutter pub get
       
-    - name: 🔍 Analyser le code
-      run: flutter analyze
+    - name: 🌐 Build for Web
+      run: flutter build web --release
       
-    - name: 🧪 Tester l'application
-      run: flutter test
-      
-    - name: 🌐 Construire la version Web
-      run: flutter build web --release --base-href /taxi-app/
-      
-    - name: 📂 Lister les fichiers générés
+    - name: 📂 Verify build
       run: ls -la build/web/
       
-    - name: 🎯 Upload les fichiers pour le déploiement
-      uses: actions/upload-pages-artifact@v3
+    - name: 🚀 Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
       with:
-        path: build/web
-
-  deploy:
-    name: 🚀 Déployer sur GitHub Pages
-    needs: build
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-    
-    permissions:
-      pages: write
-      id-token: write
-      
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-      
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: 🎯 Déployer sur GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./build/web
