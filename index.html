@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taxi Express - Réservation de Taxi en Ligne</title>
+    <meta name="description" content="Réservez votre taxi rapidement et facilement avec Taxi Express. Service de qualité supérieure avec conducteurs vérifiés.">
+    <meta name="keywords" content="taxi, réservation taxi, transport, course, chauffeur">
+    <link rel="canonical" href="https://Nouhajaziri.github.io/taxi-app/">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Taxi Express - Réservation de Taxi">
+    <meta property="og:description" content="Réservez votre taxi rapidement et facilement">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://Nouhajaziri.github.io/taxi-app/og-image.png">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Taxi Express">
+    <meta name="twitter:description" content="Réservez votre taxi en ligne">
+    
+    <script src="main.dart.js" type="application/javascript"></script>
+</head>
+<body>
+    <div id="loading">
+        <div class="spinner"></div>
+        <p>Chargement de Taxi Express...</p>
+    </div>
+    
+    <script>
+        // Script pour améliorer le SEO
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('flutter_service_worker.js');
+            });
+        }
+    </script>
+    
+    <style>
+        #loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</body>
+</html>
